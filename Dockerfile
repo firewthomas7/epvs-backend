@@ -19,9 +19,10 @@ RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8000
 
-# Clear old build-time caches, run migrations safely, and start the application server
+# Clear old caches, migrate tables, seed the demo records, and start server
 CMD php artisan config:clear && \
     php artisan route:clear && \
     php artisan view:clear && \
     php artisan migrate --force && \
+    php artisan db:seed --force && \
     php artisan serve --host=0.0.0.0 --port=8000
