@@ -3,12 +3,8 @@ services:
     name: epvs-backend
     runtime: php
     plan: free
-    buildCommand: |
-      composer install --no-dev --optimize-autoloader
-      php artisan config:cache
-      php artisan route:cache
-      php artisan view:cache
-    startCommand: php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
+    buildCommand: composer install --no-dev --optimize-autoloader && php artisan config:cache && php artisan route:cache && php artisan view:cache
+    startCommand: php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=$PORT
     envVars:
       - key: APP_NAME
         value: EPVS
@@ -20,9 +16,17 @@ services:
         value: base64:BKlFCPMnf9Mz+/+1P7lgX80Vtw9zRhPXs//arOSD/Gc=
       - key: DB_CONNECTION
         value: pgsql
+      - key: DB_URL
+        value: postgresql://epvs_user:sPlDw9TALsiBETiRDgyX3CaT7zYMFHUZ@dpg-d88111t7vvec738apr1g-a/epvs
       - key: QUEUE_CONNECTION
         value: database
       - key: CACHE_STORE
         value: database
       - key: SESSION_DRIVER
         value: database
+      - key: AI_SERVICE_URL
+        value: http://localhost:8001
+      - key: AI_SERVICE_KEY
+        value: epvs-prod-key-123
+      - key: SMS_GATEWAY_KEY
+        value: epvs-sms-key-123
