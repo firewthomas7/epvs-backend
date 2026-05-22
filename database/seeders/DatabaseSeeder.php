@@ -15,6 +15,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // 1. Prevent duplicate seed crashes by checking if data exists
+        if (User::where('email', 'admin@epvs.et')->exists()) {
+            return; 
+        }
+
         // Admin
         User::create([
             'name'              => 'EPVS Admin',
@@ -31,7 +36,7 @@ class DatabaseSeeder extends Seeder
             'name'              => 'Abebe Kebede',
             'email'             => 'abebe@selammarket.et',
             'phone'             => '+251912345678',
-            'password'          => Hash::make('Demo@1234!'),
+            'password'          => Hash::make('Demo@1234!'), // Remember the 4!
             'role'              => 'merchant',
             'is_active'         => true,
             'email_verified_at' => now(),
