@@ -1,4 +1,4 @@
-FROM php:8.2-cli
+FROM php:8.4-cli
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -29,7 +29,7 @@ RUN chmod -R 775 storage bootstrap/cache
 EXPOSE 8000
 
 # Start command
-CMD php artisan migrate --force && \
+CMD php artisan config:cache && \
+    php artisan migrate --force && \
     php artisan db:seed --force && \
-    php artisan config:cache && \
     php artisan serve --host=0.0.0.0 --port=8000
