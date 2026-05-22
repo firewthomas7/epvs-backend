@@ -10,5 +10,5 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# 3. Start the web server
-exec /entrypoint supervisord
+# 3. Correct production boot command for webdevops images
+exec /entrypoint.sh supervisord
