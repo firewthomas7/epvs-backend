@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: epvs-backend
+    runtime: php
+    plan: free
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      php artisan config:cache
+      php artisan route:cache
+      php artisan view:cache
+    startCommand: php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
+    envVars:
+      - key: APP_NAME
+        value: EPVS
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        value: base64:BKlFCPMnf9Mz+/+1P7lgX80Vtw9zRhPXs//arOSD/Gc=
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: SESSION_DRIVER
+        value: database
