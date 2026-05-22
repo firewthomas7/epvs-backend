@@ -1,5 +1,9 @@
 FROM webdevops/php:8.4
 
+# Set production environment variables for the container
+ENV WEB_DOCUMENT_ROOT=/var/www/public
+ENV APP_ENV=production
+
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -12,14 +16,13 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Set permissions
+# Set permissions for Laravel
 RUN chmod -R 775 storage bootstrap/cache
 
-# Expose port
-EXPOSE 8000
+# Optimize Laravel configuration caching during the build step
+RUN php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache
 
-# Start command
-CMD php artisan config:clear && \
-    php artisan migrate --force && \
-    php artisan db:seed --force && \
-    php artisan serve --host=0.0.0.0 --port=8000
+# Expose standard web traffic port
+EXPOSE 80
